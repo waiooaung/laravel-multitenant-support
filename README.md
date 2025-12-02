@@ -59,7 +59,7 @@ cp .env.example .env
 php artisan key:generate
 ```
 
-**Important:** You must create 5 empty databases in your MySQL server (`db_technical`, `db_billing`, `db_product`, `db_general`, `db_feedback`) and configure them in your `.env` file:
+**Important:** You must create 5 empty databases in your MySQL server (`technical`, `billing`, `product`, `general`, `feedback`) and configure them in your `.env` file:
 
 ```ini
 # .env
@@ -68,11 +68,11 @@ DB_HOST=127.0.0.1
 # ... main connection ...
 
 # Define the department databases
-DB_TECH_DATABASE=db_technical
-DB_BILLING_DATABASE=db_billing
-DB_PRODUCT_DATABASE=db_product
-DB_GENERAL_DATABASE=db_general
-DB_FEEDBACK_DATABASE=db_feedback
+DB_TECH_DATABASE=technical
+DB_BILLING_DATABASE=billing
+DB_PRODUCT_DATABASE=product
+DB_GENERAL_DATABASE=general
+DB_FEEDBACK_DATABASE=feedback
 ```
 
 ### 2\. Database Migration
