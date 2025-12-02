@@ -2,6 +2,7 @@ import AppLayout from '@/layouts/app-layout';
 import { dashboard } from '@/routes';
 import { type BreadcrumbItem } from '@/types';
 import { Head, Link } from '@inertiajs/react';
+import { router } from '@inertiajs/react';
 
 interface Ticket {
     id: number;
@@ -66,7 +67,7 @@ export default function Dashboard({ tickets = [] }: { tickets: Ticket[] }) {
                                 <tr>
                                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
                                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer</th>
-                                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Department (DB)</th>
+                                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Department</th>
                                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
                                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Note</th>
                                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
@@ -75,7 +76,11 @@ export default function Dashboard({ tickets = [] }: { tickets: Ticket[] }) {
                             </thead>
                             <tbody className="bg-white divide-y divide-gray-200 dark:bg-sidebar-accent dark:divide-gray-700">
                                 {tickets.map((ticket) => (
-                                    <tr key={`${ticket.source_database}-${ticket.id}`}>
+                                    <tr
+                                        key={`${ticket.source_database}-${ticket.id}`}
+                                        onClick={() => router.get(`/admin/tickets/${ticket.id}`, { db: ticket.source_database })}
+                                        className="border-b border-gray-200 dark:border-gray-700 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+                                    >
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                             #{ticket.id}
                                         </td>
@@ -89,23 +94,15 @@ export default function Dashboard({ tickets = [] }: { tickets: Ticket[] }) {
                                             </span>
                                         </td>
                                         <td className="px-6 py-4">
-                                            <div
-                                                className="text-sm text-gray-900 dark:text-gray-300 max-w-xs truncate"
-                                                title={ticket.description} // Shows full text on hover
-                                            >
+                                            <div className="text-sm text-gray-900 dark:text-gray-300 max-w-xs truncate" title={ticket.description}>
                                                 {ticket.description}
                                             </div>
                                         </td>
                                         <td className="px-6 py-4">
                                             {ticket.admin_note ? (
-                                                <div
-                                                    className="text-sm text-gray-500 dark:text-gray-400 max-w-xs truncate [&>p]:inline [&>p]:m-0"
-                                                    dangerouslySetInnerHTML={{ __html: ticket.admin_note }}
-                                                />
+                                                <div className="text-sm text-gray-500 dark:text-gray-400 max-w-xs truncate" dangerouslySetInnerHTML={{ __html: ticket.admin_note }} />
                                             ) : (
-                                                <span className="text-xs text-gray-400 italic">
-                                                    -
-                                                </span>
+                                                <span className="text-xs text-gray-400 italic">-</span>
                                             )}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
@@ -117,7 +114,9 @@ export default function Dashboard({ tickets = [] }: { tickets: Ticket[] }) {
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                             <Link
-                                                href={`/admin/tickets/${ticket.id}?db=${ticket.source_database}`}
+                                                href={`/admin/tickets/${ticket.id}`}
+                                                data={{ db: ticket.source_database }}
+                                                onClick={(e) => e.stopPropagation()}
                                                 className="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400"
                                             >
                                                 View
