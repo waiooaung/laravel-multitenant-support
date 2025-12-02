@@ -20,7 +20,6 @@ import {
     BlockQuote
 } from 'ckeditor5';
 
-// 3. Import the CSS for the editor
 import 'ckeditor5/ckeditor5.css';
 
 interface Ticket {
@@ -42,7 +41,7 @@ interface Props {
 
 export default function Show({ ticket, db }: Props) {
     const breadcrumbs: BreadcrumbItem[] = [
-        { title: 'Dashboard', href: '/admin/dashboard' },
+        { title: 'Dashboard', href: '/dashboard' },
         { title: `Ticket #${ticket.id}`, href: '#' },
     ];
 
