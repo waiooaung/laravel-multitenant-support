@@ -1,0 +1,77 @@
+name: Deploy to DigitalOcean
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to Server via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.DO_HOST }}
+          username: ${{ secrets.DO_USERNAME }}
+          password: ${{ secrets.DO_PASSWORD }}
+          port: 22
+          script: |
+            # VARIABLES
+            # Ensure this matches your actual folder name on the server
+            PROJECT_PATH="/var/www/laravel-multitenant-support"
+
+            # 1. Fix Git Ownership Issue
+            git config --global --add safe.directory $PROJECT_PATH
+
+            # Navigate to project
+            cd $PROJECT_PATH
+
+            # 2. Safely Enable Maintenance Mode
+            if [ -f artisan ]; then
+                php artisan down || true
+            fi
+
+            # Pull latest changes
+            git pull origin main
+
+            # 3. Install PHP Dependencies
+            composer install --no-dev --optimize-autoloader
+
+            # Install JS Dependencies & Build (React/Inertia)
+            npm install
+            npm run build
+
+            # 4. Run Multi-Database Migrations
+            # Main DB (Users/Admins)
+            php artisan migrate --force
+
+            # Department DBs (Tickets) - As required by README
+            php artisan migrate --database=technical --force
+            php artisan migrate --database=billing --force
+            php artisan migrate --database=product --force
+            php artisan migrate --database=general --force
+            php artisan migrate --database=feedback --force
+
+            # Link Storage
+            php artisan storage:link
+
+            # Clear caches
+            php artisan optimize:clear
+            php artisan config:cache
+            php artisan route:cache
+            php artisan view:cache
+
+            # 5. Fix Permissions
+            sudo chown -R www-data:www-data $PROJECT_PATH
+            sudo chmod -R 775 $PROJECT_PATH/storage
+            sudo chmod -R 775 $PROJECT_PATH/bootstrap/cache
+
+            # Run Seeders (Caution: Ensure your seeders are idempotent to avoid duplicates)
+            php artisan db:seed --force
+
+            # Bring site back up
+            php artisan up
