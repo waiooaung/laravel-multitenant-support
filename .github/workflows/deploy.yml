@@ -39,7 +39,7 @@ jobs:
             git pull origin main
 
             # 3. Install PHP Dependencies
-            composer install --no-dev --optimize-autoloader
+            composer install --optimize-autoloader
 
             # Install JS Dependencies & Build (React/Inertia)
             npm install
