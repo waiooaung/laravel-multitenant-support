@@ -102,6 +102,9 @@ npm install
 
 # Start the Vite development server
 npm run dev
+
+# Start the php server
+php artisan serve
 ```
 
 Visit `http://localhost:8000` to see the Support page.
@@ -111,10 +114,8 @@ Visit `http://localhost:8000/dashboard` to see the Dashboard page.
 
 ### Public Support Form
 
-Visit `/support` to log a ticket.
-
-- Select **"Technical Issues"** -\> Saves to `db_technical`.
-- Select **"Account & Billing"** -\> Saves to `db_billing`.
+- Select **"Technical Issues"** -\> Saves to `technical`.
+- Select **"Account & Billing"** -\> Saves to `billing`.
 
 ### Admin Panel
 
