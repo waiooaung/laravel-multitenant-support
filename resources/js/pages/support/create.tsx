@@ -135,9 +135,6 @@ export default function Create() {
                                         ))}
                                     </select>
                                 </div>
-                                <p className="mt-2 text-xs text-slate-500">
-                                    * This ensures your ticket is routed to the correct database immediately.
-                                </p>
                                 {errors.type && <p className="mt-1 text-xs text-red-500">{errors.type}</p>}
                             </div>
 
