@@ -26,9 +26,7 @@ class AdminController extends Controller
             $allTickets = $allTickets->merge($tickets);
         }
 
-        $allTickets = $allTickets->sortByDesc(function ($ticket) {
-            return [$ticket->created_at, $ticket->updated_at];
-        })->values();
+        $allTickets = $allTickets->sortByDesc(fn($ticket) => [$ticket->created_at, $ticket->updated_at])->values();
 
         return Inertia::render('admin/dashboard', [
             'tickets' => $allTickets,
