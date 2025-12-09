@@ -2,11 +2,7 @@ import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head, useForm } from '@inertiajs/react';
 import { FormEventHandler } from 'react';
-
-// 1. Import CKEditor React Wrapper
 import { CKEditor } from '@ckeditor/ckeditor5-react';
-
-// 2. Import the Core Editor + The specific Plugins you want
 import {
     ClassicEditor,
     Bold,
@@ -19,7 +15,6 @@ import {
     List,
     BlockQuote
 } from 'ckeditor5';
-
 import 'ckeditor5/ckeditor5.css';
 
 interface Ticket {
